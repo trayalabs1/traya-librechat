@@ -4,10 +4,11 @@ import { megabyte, excelMimeTypes, FileSources } from 'librechat-data-provider';
 import type { TextItem } from 'pdfjs-dist/types/src/display/api';
 import type { MistralOCRUploadResult } from '~/types';
 import { assertSafeZipSize } from './zipSafety';
+import { envMegabytes } from './limits';
 
 type FileParseFn = (file: Express.Multer.File) => Promise<string>;
 
-const DOCUMENT_PARSER_MAX_FILE_SIZE = 15 * megabyte;
+const DOCUMENT_PARSER_MAX_FILE_SIZE = envMegabytes('DOCUMENT_PARSER_MAX_FILE_SIZE_MB', 15);
 const ODT_MAX_DECOMPRESSED_SIZE = 50 * megabyte;
 
 /**

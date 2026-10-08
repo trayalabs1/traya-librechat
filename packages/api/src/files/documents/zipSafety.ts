@@ -1,5 +1,6 @@
 import yauzl from 'yauzl';
 import { megabyte } from 'librechat-data-provider';
+import { envMegabytes } from './limits';
 
 /**
  * Default per-archive total decompressed-size cap. Office documents in
@@ -8,14 +9,14 @@ import { megabyte } from 'librechat-data-provider';
  * pathological zip-bomb case (e.g. a 1 MB compressed XLSX that inflates
  * to 200+ MB of XML — see SEC review on PR #12934).
  */
-const DEFAULT_MAX_TOTAL_BYTES = 100 * megabyte;
+const DEFAULT_MAX_TOTAL_BYTES = envMegabytes('DOCUMENT_ZIP_MAX_TOTAL_MB', 100);
 
 /**
  * Default per-entry decompressed-size cap. A single inflated entry
  * larger than this is essentially always either a bomb or content the
  * downstream parser would balk at anyway.
  */
-const DEFAULT_MAX_ENTRY_BYTES = 25 * megabyte;
+const DEFAULT_MAX_ENTRY_BYTES = envMegabytes('DOCUMENT_ZIP_MAX_ENTRY_MB', 25);
 
 /**
  * Tag-distinct error so callers (e.g. the office HTML producers and the
